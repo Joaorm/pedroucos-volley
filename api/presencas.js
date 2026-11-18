@@ -42,8 +42,7 @@ export async function openStore() {
       const blob = blobs.find((item) => item.pathname === pathname);
       if (!blob) return { etag: null, record: null };
       const url = new URL(blob.url);
-      // Unique query so a public blob is not served from the 60s CDN cache after an overwrite.
-      url.searchParams.set("v", `${blob.etag || "0"}-${Date.now()}`);
+      url.searchParams.set("v", blob.etag || String(new Date(blob.uploadedAt).getTime()));
       const response = await fetch(url, {
         cache: "no-store",
         headers: { "cache-control": "no-cache" },
