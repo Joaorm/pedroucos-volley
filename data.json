@@ -1,0 +1,52 @@
+{
+  "_comentario": "TODOS os dados do site estão neste ficheiro. Datas AAAA-MM-DD, horas HH:MM. 'casa': true = em casa, false = fora. 'sets': lista 'nós-eles'. Entradas com \"exemplo\": true mostram a etiqueta 'Exemplo' — apagar quando houver dados reais.",
+  "equipa": {
+    "nome": "Voleibol CSP",
+    "clube": "Clube Sportivo de Pedrouços",
+    "contacto_alteracoes": "einstein.rochaemelo+volley@mail.grokbot.com"
+  },
+  "proximos_jogos": [
+    {
+      "exemplo": true,
+      "data": "2026-11-22",
+      "hora": "18:00",
+      "local": "Pavilhão (exemplo)",
+      "adversario": "Equipa Exemplo A",
+      "casa": true
+    },
+    {
+      "exemplo": true,
+      "data": "2026-11-29",
+      "hora": "16:00",
+      "local": "Pavilhão do adversário (exemplo)",
+      "adversario": "Equipa Exemplo B",
+      "casa": false
+    }
+  ],
+  "resultados": [
+    {
+      "exemplo": true,
+      "data": "2026-11-08",
+      "adversario": "Equipa Exemplo C",
+      "casa": true,
+      "sets": [
+        "25-20",
+        "22-25",
+        "25-18",
+        "25-21"
+      ]
+    },
+    {
+      "exemplo": true,
+      "data": "2026-11-01",
+      "adversario": "Equipa Exemplo D",
+      "casa": false,
+      "sets": [
+        "21-25",
+        "25-23",
+        "19-25",
+        "23-25"
+      ]
+    }
+  ]
+}

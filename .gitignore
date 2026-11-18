@@ -1,0 +1,23 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.idea/
+.vscode/
+*.swp
+*~
+
+# Python (deploy.py)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local secrets and deploy output
+.env
+.env.*
+volley-deploy.json
+
+# Vercel CLI
+.vercel/
