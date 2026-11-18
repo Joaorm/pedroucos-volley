@@ -1,5 +1,5 @@
 {
-  "_comentario": "TODOS os dados do site estão neste ficheiro. Datas AAAA-MM-DD, horas HH:MM. 'casa': true = em casa, false = fora. 'sets': lista 'nós-eles'. Entradas com \"exemplo\": true mostram a etiqueta 'Exemplo' — apagar quando houver dados reais.",
+  "_comentario": "TODOS os dados do site estão neste ficheiro. Datas AAAA-MM-DD, horas HH:MM. 'casa': true = em casa, false = fora. 'sets': lista 'nós-eles'. Cada jogo tem 'video' (link do Google Drive ou null) e 'competicao' opcional. 'casa' segue a coluna Visitado/Visitante do calendário oficial (os jogos são em pavilhões da liga). Resultados sem 'sets'/'resultado' aparecem como 'Resultado por confirmar'. Fonte: calendários PDF da liga (1ª fase). Treinos: 'treinos.dias' (terca e quinta) e 'treinos.cancelados' (datas AAAA-MM-DD sem treino). Sem hora nem local.",
   "equipa": {
     "nome": "Voleibol CSP",
     "clube": "Clube Sportivo de Pedrouços",
@@ -7,46 +7,50 @@
   },
   "proximos_jogos": [
     {
-      "exemplo": true,
-      "data": "2026-11-22",
-      "hora": "18:00",
-      "local": "Pavilhão (exemplo)",
-      "adversario": "Equipa Exemplo A",
-      "casa": true
+      "data": "2026-11-20",
+      "hora": "22:00",
+      "local": "Pav. 1º Maio (central)",
+      "adversario": "Bairro São João A. C.",
+      "casa": true,
+      "competicao": "Liga de Voleibol Masculino do Distrito de Lisboa 2026/27 · 1ª fase · Série C · Jogo 53",
+      "video": null
     },
     {
-      "exemplo": true,
-      "data": "2026-11-29",
-      "hora": "16:00",
-      "local": "Pavilhão do adversário (exemplo)",
-      "adversario": "Equipa Exemplo B",
-      "casa": false
+      "data": "2026-11-23",
+      "hora": "20:00",
+      "local": "Pav. 1º Maio (sul)",
+      "adversario": "C. D. Cova da Piedade",
+      "casa": false,
+      "competicao": "Liga de Voleibol Masculino do Distrito de Lisboa 2026/27 · 1ª fase · Série C · Jogo 56",
+      "video": null
     }
   ],
   "resultados": [
     {
-      "exemplo": true,
-      "data": "2026-11-08",
-      "adversario": "Equipa Exemplo C",
-      "casa": true,
-      "sets": [
-        "25-20",
-        "22-25",
-        "25-18",
-        "25-21"
-      ]
+      "data": "2026-11-09",
+      "hora": "20:00",
+      "local": "Pav. 1º Maio (sul)",
+      "adversario": "Odivelas Sports Club",
+      "casa": false,
+      "competicao": "Liga de Voleibol Masculino do Distrito de Lisboa 2026/27 · 1ª fase · Série C · Jogo 50",
+      "sets": [],
+      "resultado": null,
+      "video": null
     },
     {
-      "exemplo": true,
-      "data": "2026-11-01",
-      "adversario": "Equipa Exemplo D",
-      "casa": false,
-      "sets": [
-        "21-25",
-        "25-23",
-        "19-25",
-        "23-25"
-      ]
+      "data": "2026-11-06",
+      "hora": "22:00",
+      "local": "Pav. 1º Maio (sul)",
+      "adversario": "R. C. Vale de Cavala",
+      "casa": true,
+      "competicao": "Liga de Voleibol Masculino do Distrito de Lisboa 2026/27 · 1ª fase · Série C · Jogo 46",
+      "sets": [],
+      "resultado": null,
+      "video": null
     }
-  ]
+  ],
+  "treinos": {
+    "dias": ["terca", "quinta"],
+    "cancelados": []
+  }
 }

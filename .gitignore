@@ -8,6 +8,10 @@ Thumbs.db
 *.swp
 *~
 
+# Node (API: @vercel/blob)
+node_modules/
+npm-debug.log*
+
 # Python (deploy.py)
 __pycache__/
 *.py[cod]
