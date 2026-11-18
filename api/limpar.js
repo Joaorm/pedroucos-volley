@@ -2,7 +2,7 @@ import { openStore } from "./presencas.js";
 import { normalizeName } from "../schedule.js";
 
 const DATE = "2026-11-19";
-const TEST_NAME = "verificacao agente";
+const TEST_NAMES = new Set(["verificacao agente", "teste fresco"]);
 
 function json(body, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -28,7 +28,7 @@ export async function POST() {
       let removed = false;
       for (const value of Object.values(current.record?.byName || {})) {
         if (!value || typeof value.name !== "string") continue;
-        if (normalizeName(value.name) === TEST_NAME) {
+        if (TEST_NAMES.has(normalizeName(value.name))) {
           removed = true;
           continue;
         }
