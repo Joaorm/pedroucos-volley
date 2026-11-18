@@ -8,148 +8,178 @@
 <meta name="description" content="Resultados e próximos jogos da equipa de voleibol do Clube Sportivo de Pedrouços.">
 <link rel="icon" href="logo-180.png">
 <link rel="apple-touch-icon" href="logo-180.png">
-<style>
-  :root{--bg:#111111;--card:#1b1b1b;--line:#2c2c2c;--gold:#FFD700;--white:#ffffff;--muted:#b8b8b8;--red:#E63946}
-  *{box-sizing:border-box}
-  html{scroll-behavior:smooth;scroll-padding-top:16px;color-scheme:dark}
-  body{margin:0;background:var(--bg);color:var(--white);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
-  a{color:var(--gold)}
-  header.hero{position:relative;text-align:center;padding:28px 16px 18px;border-bottom:3px solid var(--gold);background:radial-gradient(circle at 50% 0,#262200 0,var(--bg) 70%)}
-  header.hero img{width:104px;height:104px;display:block;margin:0 auto 12px;border-radius:50%;box-shadow:0 0 0 3px var(--gold),0 6px 24px rgba(255,215,0,.18)}
-  header.hero h1{margin:0;font-size:1.6rem;color:var(--gold);letter-spacing:.02em}
-  header.hero p{margin:4px 0 0;color:var(--muted);font-size:.95rem}
-  a.nav{position:absolute;top:8px;right:6px;min-height:44px;display:inline-flex;align-items:center;padding:8px 10px;font-weight:700;text-decoration:none}
-  main{max-width:760px;margin:0 auto;padding:8px 14px 24px}
-  section{margin-top:26px}
-  h2{color:var(--gold);font-size:1.2rem;margin:0 0 12px;display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.06em}
-  h2::before{content:"";width:6px;height:20px;background:var(--gold);border-radius:2px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px}
-  .card h3{margin:0 0 4px;font-size:1.05rem}
-  .meta{color:var(--muted);font-size:.9rem}
-  .comp{color:var(--muted);font-size:.78rem;margin-top:4px}
-  .row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
-  .badge{display:inline-block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border-radius:6px;padding:2px 7px;margin-right:6px;vertical-align:middle}
-  .b-casa{border:1px solid var(--gold);color:var(--gold)}
-  .b-fora{border:1px solid #777;color:#ddd}
-  .b-ex{background:transparent;border:1px dashed #888;color:#aaa}
-  .when{text-align:right;flex:0 0 auto}
-  .when .d{font-weight:700;color:var(--gold);text-transform:capitalize}
-  .when .t{font-size:1.25rem;font-weight:800}
-  .score{font-size:1.5rem;font-weight:800;white-space:nowrap}
-  .win{color:var(--gold)} .loss{color:var(--muted)}
-  .sets{margin-top:6px;display:flex;flex-wrap:wrap;gap:6px}
-  .sets span{font-size:.82rem;background:#262626;border-radius:6px;padding:2px 8px;font-variant-numeric:tabular-nums}
-  .video{display:inline-block;margin-top:8px;font-weight:700}
-  .empty{color:var(--muted);font-style:italic}
-  .err{background:var(--red);color:#fff;padding:12px;border-radius:10px}
-  footer{border-top:3px solid var(--gold);text-align:center;padding:18px 14px calc(28px + env(safe-area-inset-bottom));color:var(--muted);font-size:.88rem}
-  footer a{overflow-wrap:anywhere}
-</style>
+<link rel="preload" href="fonts/barlow-condensed-800.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/barlow-condensed-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="site.css">
 </head>
 <body>
-<header class="hero">
-  <a class="nav" href="./">Presenças</a>
-  <img src="logo-180.png" alt="Logótipo do Clube Sportivo de Pedrouços" width="104" height="104">
-  <h1 id="teamName">Voleibol CSP</h1>
-  <p id="teamSub">Clube Sportivo de Pedrouços</p>
+<header class="bar">
+  <div class="bar-in">
+    <div class="brand"><img src="logo-180.png" alt="Clube Sportivo de Pedrouços" width="44" height="44"><span>Voleibol</span></div>
+    <nav class="nav" aria-label="Secções">
+      <a href="./">Presenças</a>
+      <a href="jogos" aria-current="page">Jogos</a>
+    </nav>
+  </div>
 </header>
-<main>
-  <div id="loadError"></div>
-  <section id="resultados"><h2>Resultados</h2><div id="resultadosList"></div></section>
-  <section id="jogos"><h2>Próximos jogos</h2><div id="jogosList"></div></section>
+
+<main class="wrap wrap--wide">
+  <div class="page-head">
+    <h1>Jogos</h1>
+    <p class="page-sub" id="comp"></p>
+  </div>
+  <p id="alert" class="notice notice--error" role="alert" hidden></p>
+  <section class="block" aria-labelledby="h-proximos">
+    <h2 class="block-title" id="h-proximos">Próximos jogos</h2>
+    <div id="jogosList"></div>
+  </section>
+  <section class="block" aria-labelledby="h-resultados">
+    <h2 class="block-title" id="h-resultados">Resultados</h2>
+    <div id="resultadosList"></div>
+  </section>
 </main>
-<footer>
-  <div>Pedidos de alteração: <a id="contactLink" href="mailto:einstein.rochaemelo+volley@mail.grokbot.com">einstein.rochaemelo+volley@<wbr>mail.grokbot.com</a></div>
-  <div style="margin-top:6px">Clube Sportivo de Pedrouços · Voleibol</div>
-</footer>
-<script>
-const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const civil = iso => { const [y,m,d] = iso.split("-").map(Number); return new Date(Date.UTC(y, m - 1, d, 12)); };
-const fmtDia = d => civil(d).toLocaleDateString("pt-PT", {timeZone:"UTC", weekday:"short", day:"numeric", month:"short"});
-const fmtData = d => civil(d).toLocaleDateString("pt-PT", {timeZone:"UTC", day:"numeric", month:"long", year:"numeric"});
-const lisbonToday = () => new Intl.DateTimeFormat("en-CA", {timeZone:"Europe/Lisbon", year:"numeric", month:"2-digit", day:"2-digit"}).format(new Date());
-const ex = o => o.exemplo ? '<span class="badge b-ex">Exemplo</span>' : "";
-const casaFora = o => o.casa === undefined ? "" : (o.casa ? '<span class="badge b-casa">Casa</span>' : '<span class="badge b-fora">Fora</span>');
-const empty = t => `<p class="empty">${t}</p>`;
-const safeUrl = value => {
+
+<footer class="foot">Pedidos de alteração: <a id="contactLink" href="mailto:einstein.rochaemelo+volley@mail.grokbot.com">einstein.rochaemelo+volley@<wbr>mail.grokbot.com</a></footer>
+
+<script type="module">
+import { addDays, formatSession, isIsoDate, lisbonToday } from "./schedule.js";
+
+const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const PIN = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>';
+const PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>';
+
+function safeUrl(value) {
   if (typeof value !== "string" || !value) return "";
   try {
     const url = new URL(value);
     return url.protocol === "https:" || url.protocol === "http:" ? url.href : "";
   } catch { return ""; }
-};
-const videoLink = value => {
-  const url = safeUrl(value);
-  return url ? `<a class="video" href="${esc(url)}" target="_blank" rel="noopener noreferrer">Vídeo</a>` : "";
-};
-const compLine = value => value ? `<div class="comp">${esc(value)}</div>` : "";
-
-function render(data){
-  const eq = data.equipa || {};
-  if (eq.nome) { document.getElementById("teamName").textContent = eq.nome; document.title = "Jogos · " + eq.nome; }
-  if (eq.clube || eq.subtitulo) document.getElementById("teamSub").textContent = [eq.clube, eq.subtitulo].filter(Boolean).join(" · ");
-  if (eq.contacto_alteracoes) {
-    const a = document.getElementById("contactLink");
-    const address = eq.contacto_alteracoes;
-    a.href = "mailto:" + address;
-    const at = address.lastIndexOf("@");
-    a.replaceChildren();
-    if (at > 0) a.append(address.slice(0, at + 1), document.createElement("wbr"), address.slice(at + 1));
-    else a.textContent = address;
-  }
-
-  const today = lisbonToday();
-  const jogos = (data.proximos_jogos || []).filter(e => e.data >= today)
-    .sort((a,b) => (a.data + (a.hora||"")).localeCompare(b.data + (b.hora||"")));
-  document.getElementById("jogosList").innerHTML = jogos.length ? jogos.map(e => `
-    <article class="card"><div class="row">
-      <div>
-        <div>${casaFora(e)}${ex(e)}</div>
-        <h3>vs ${esc(e.adversario || "Adversário a definir")}</h3>
-        <div class="meta">📍 ${esc(e.local || "Local a definir")}</div>
-        ${compLine(e.competicao)}
-        ${videoLink(e.video)}
-      </div>
-      <div class="when"><div class="d">${e.data ? fmtDia(e.data) : ""}</div><div class="t">${esc(e.hora || "--:--")}</div></div>
-    </div></article>`).join("") : empty("Sem jogos marcados.");
-
-  const res = [...(data.resultados || [])].sort((a,b) => String(b.data).localeCompare(String(a.data)));
-  document.getElementById("resultadosList").innerHTML = res.length ? res.map(r => {
-    const sets = (r.sets || []).map(s => String(s).split("-").map(Number)).filter(([a,b]) => Number.isFinite(a) && Number.isFinite(b));
-    if (!sets.length) {
-      const label = r.resultado ? esc(r.resultado) : "Resultado por confirmar";
-      return `<article class="card"><div class="row">
-        <div>
-          <div>${casaFora(r)}${ex(r)}</div>
-          <h3>vs ${esc(r.adversario)}</h3>
-          <div class="meta">${r.data ? fmtData(r.data) : ""}</div>
-          <div class="meta">${label}</div>
-          ${compLine(r.competicao)}
-          ${videoLink(r.video)}
-        </div>
-      </div></article>`;
-    }
-    const nos = sets.filter(([a,b]) => a > b).length, eles = sets.filter(([a,b]) => b > a).length;
-    const ganhou = nos > eles;
-    return `<article class="card"><div class="row">
-      <div>
-        <div>${casaFora(r)}${ex(r)}</div>
-        <h3>vs ${esc(r.adversario)}</h3>
-        <div class="meta">${r.data ? fmtData(r.data) : ""}</div>
-        ${compLine(r.competicao)}
-        ${videoLink(r.video)}
-      </div>
-      <div class="when"><div class="score ${ganhou ? "win" : "loss"}">${nos} – ${eles}</div><div class="meta">${ganhou ? "Vitória" : "Derrota"}</div></div>
-    </div>
-    <div class="sets">${sets.map(([a,b],i) => `<span>S${i+1}: ${a}-${b}</span>`).join("")}</div>
-    </article>`;
-  }).join("") : empty("Ainda sem resultados.");
 }
 
-fetch("data.json", {cache: "no-store"})
-  .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+function videoLink(value, opponent) {
+  const url = safeUrl(value);
+  if (!url) return "";
+  const label = opponent ? `Vídeo do jogo com ${opponent}` : "Vídeo do jogo";
+  return `<a class="video" href="${esc(url)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(label)}">${PLAY}<span>Vídeo</span></a>`;
+}
+
+// "Liga … · 1ª fase · Série C · Jogo 53" → { prefix: "Liga … · 1ª fase · Série C", game: "Jogo 53" }
+function splitComp(value) {
+  if (typeof value !== "string" || !value.trim()) return { prefix: "", game: "" };
+  const parts = value.split("·").map((part) => part.trim()).filter(Boolean);
+  const game = parts.length && /^jogo\b/i.test(parts[parts.length - 1]) ? parts.pop() : "";
+  return { prefix: parts.join(" · "), game };
+}
+
+function when(iso, time) {
+  const [dow, dm] = isIsoDate(iso) ? formatSession(iso).split(" ") : ["", "–"];
+  const clock = time === undefined ? "" : `<span class="time">${esc(time || "--:--")}</span>`;
+  return `<div class="game-when"><span class="dow">${esc(dow)}</span><span class="dm">${esc(dm)}</span>${clock}</div>`;
+}
+
+function tags(game, comp) {
+  const out = [];
+  if (game.casa === true) out.push('<span class="tag tag--casa">Casa</span>');
+  if (game.casa === false) out.push('<span class="tag">Fora</span>');
+  if (game.exemplo) out.push('<span class="tag tag--muted">Exemplo</span>');
+  if (comp.game) out.push(`<span class="tag tag--muted">${esc(comp.game)}</span>`);
+  return out.length ? `<div class="tags">${out.join("")}</div>` : "";
+}
+
+function opponent(game, fallback) {
+  return `<h3 class="opp"><span class="vs">vs</span> ${esc(game.adversario || fallback)}</h3>`;
+}
+
+function upcomingCard(game, index, today, shared) {
+  const comp = splitComp(game.competicao);
+  let eyebrow = "";
+  if (index === 0) {
+    const label = game.data === today ? "Hoje" : game.data === addDays(today, 1) ? "Amanhã" : "Próximo jogo";
+    eyebrow = `<p class="eyebrow">${label}</p>`;
+  }
+  return `<article class="game${index === 0 ? " game--next" : ""}">
+    ${eyebrow}
+    ${when(game.data, game.hora || "")}
+    <div class="game-body">
+      ${tags(game, comp)}
+      ${opponent(game, "Adversário a definir")}
+      <p class="venue">${PIN}<span>${esc(game.local || "Local a definir")}</span></p>
+      ${!shared && comp.prefix ? `<p class="comp">${esc(comp.prefix)}</p>` : ""}
+      ${videoLink(game.video, game.adversario)}
+    </div>
+  </article>`;
+}
+
+function resultCard(game, shared) {
+  const comp = splitComp(game.competicao);
+  const sets = (Array.isArray(game.sets) ? game.sets : [])
+    .map((set) => String(set).split("-").map(Number))
+    .filter(([a, b]) => Number.isFinite(a) && Number.isFinite(b));
+  let score = "";
+  let detail;
+  if (sets.length) {
+    const nos = sets.filter(([a, b]) => a > b).length;
+    const eles = sets.filter(([a, b]) => b > a).length;
+    const outcome = nos > eles ? "win" : eles > nos ? "loss" : "";
+    const label = outcome === "win" ? "Vitória" : outcome === "loss" ? "Derrota" : "";
+    score = `<div class="score ${outcome}"><b>${nos}–${eles}</b>${label ? `<span>${label}</span>` : ""}</div>`;
+    detail = `<div class="sets"><span class="sr-only">Parciais:</span>${sets.map(([a, b]) => `<span${a > b ? ' class="won"' : ""}>${a}–${b}</span>`).join("")}</div>`;
+  } else {
+    detail = `<p class="pending">${game.resultado ? esc(game.resultado) : "Resultado por confirmar"}</p>`;
+  }
+  return `<article class="game game--result">
+    ${when(game.data)}
+    <div class="game-body">
+      ${tags(game, comp)}
+      ${opponent(game, "Adversário")}
+      ${detail}
+      ${!shared && comp.prefix ? `<p class="comp">${esc(comp.prefix)}</p>` : ""}
+      ${videoLink(game.video, game.adversario)}
+    </div>
+    ${score}
+  </article>`;
+}
+
+function setContact(address) {
+  const link = document.getElementById("contactLink");
+  link.href = `mailto:${address}`;
+  const at = address.lastIndexOf("@");
+  link.replaceChildren();
+  if (at > 0) link.append(address.slice(0, at + 1), document.createElement("wbr"), address.slice(at + 1));
+  else link.textContent = address;
+}
+
+function render(data) {
+  const team = data.equipa || {};
+  if (team.nome) document.title = `Jogos · ${team.nome}`;
+  if (typeof team.contacto_alteracoes === "string" && team.contacto_alteracoes.includes("@")) setContact(team.contacto_alteracoes);
+
+  const today = lisbonToday();
+  const upcoming = (data.proximos_jogos || [])
+    .filter((game) => String(game.data || "") >= today)
+    .sort((a, b) => (a.data + (a.hora || "")).localeCompare(b.data + (b.hora || "")));
+  const results = [...(data.resultados || [])].sort((a, b) => String(b.data).localeCompare(String(a.data)));
+
+  const prefixes = new Set([...upcoming, ...results].map((game) => splitComp(game.competicao).prefix).filter(Boolean));
+  const shared = prefixes.size === 1 && [...upcoming, ...results].every((game) => splitComp(game.competicao).prefix);
+  document.getElementById("comp").textContent = shared ? [...prefixes][0] : "";
+
+  document.getElementById("jogosList").innerHTML = upcoming.length
+    ? upcoming.map((game, index) => upcomingCard(game, index, today, shared)).join("")
+    : '<p class="empty">Sem jogos marcados.</p>';
+  document.getElementById("resultadosList").innerHTML = results.length
+    ? results.map((game) => resultCard(game, shared)).join("")
+    : '<p class="empty">Ainda sem resultados.</p>';
+}
+
+fetch("data.json", { cache: "no-store" })
+  .then((response) => { if (!response.ok) throw new Error(String(response.status)); return response.json(); })
   .then(render)
-  .catch(() => { document.getElementById("loadError").innerHTML = '<p class="err">Não foi possível carregar os dados da equipa. Tenta recarregar a página.</p>'; });
+  .catch(() => {
+    const alert = document.getElementById("alert");
+    alert.textContent = "Não foi possível carregar os jogos. Tenta recarregar a página.";
+    alert.hidden = false;
+  });
 </script>
 </body>
 </html>

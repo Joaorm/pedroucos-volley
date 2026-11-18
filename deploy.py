@@ -9,6 +9,9 @@ here = os.path.dirname(os.path.abspath(__file__))
 files = [
     "index.html",
     "jogos.html",
+    "site.css",
+    "fonts/barlow-condensed-700.woff2",
+    "fonts/barlow-condensed-800.woff2",
     "schedule.js",
     "data.json",
     "vercel.json",

@@ -8,258 +8,201 @@
 <meta name="description" content="Presenças nos treinos de voleibol do Clube Sportivo de Pedrouços.">
 <link rel="icon" href="logo-180.png">
 <link rel="apple-touch-icon" href="logo-180.png">
-<style>
-  :root{--bg:#111111;--card:#1b1b1b;--line:#2c2c2c;--gold:#FFD700;--white:#ffffff;--muted:#b8b8b8;--red:#E63946}
-  *{box-sizing:border-box}
-  html{color-scheme:dark}
-  body{margin:0;background:var(--bg);color:var(--white);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
-  a{color:var(--gold)}
-  header.top{position:relative;text-align:center;padding:16px 16px 14px;border-bottom:3px solid var(--gold);background:radial-gradient(circle at 50% 0,#262200 0,var(--bg) 72%)}
-  header.top img{width:76px;height:76px;border-radius:50%;box-shadow:0 0 0 3px var(--gold),0 6px 24px rgba(255,215,0,.18)}
-  a.nav{position:absolute;top:8px;right:6px;min-height:44px;display:inline-flex;align-items:center;padding:8px 10px;font-weight:700;text-decoration:none}
-  main{max-width:760px;margin:0 auto;padding:14px 14px 8px}
-  #alert:not([hidden]){background:var(--red);color:#fff;padding:12px;border-radius:10px;margin:0 0 12px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 12px 12px;margin-bottom:12px}
-  .when{margin:0 0 10px;text-align:center;color:var(--gold);font-weight:800;letter-spacing:.01em}
-  h1.when{font-size:2.15rem}
-  h2.when{font-size:1.55rem}
-  .me{text-align:center;margin:0 0 10px;font-weight:700}
-  .alterar{background:none;border:0;color:var(--gold);font:inherit;font-size:.85rem;font-weight:700;margin-left:8px;min-height:44px;padding:8px;cursor:pointer}
-  .nome{width:100%;font:inherit;font-size:16px;padding:12px 14px;border-radius:12px;border:1px solid #555;background:#111;color:#fff;margin:0 0 10px}
-  .nome:focus{outline:2px solid var(--gold);border-color:transparent}
-  .nome[aria-invalid="true"]{border-color:var(--red)}
-  .actions{display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:8px}
-  .actions button{font:inherit;font-weight:800;font-size:.92rem;min-height:48px;border-radius:12px;border:1px solid #666;background:transparent;color:#fff;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent}
-  .actions button:focus-visible,.alterar:focus-visible,a.nav:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-  .actions button[aria-pressed="true"][data-status="vou"]{background:var(--gold);color:#111;border-color:var(--gold)}
-  .actions button[aria-pressed="true"][data-status="nao"]{background:var(--red);color:#fff;border-color:var(--red)}
-  .actions button[aria-pressed="true"][data-status="talvez"]{background:#fff;color:#111;border-color:#fff}
-  .actions button:disabled{opacity:.45}
-  .zero{color:var(--muted);text-align:center;margin:12px 0 0}
-  .group{margin-top:12px}
-  .group h2{margin:0;font-size:.95rem;font-weight:800;color:var(--gold)}
-  .group.nao h2{color:#fff}
-  .group.talvez h2{color:var(--muted)}
-  .group ul{list-style:none;margin:0;padding:0}
-  .group li{padding:7px 0;border-top:1px solid var(--line);overflow-wrap:anywhere}
-  footer{border-top:3px solid var(--gold);text-align:center;padding:18px 14px calc(28px + env(safe-area-inset-bottom));color:var(--muted);font-size:.88rem;margin-top:8px}
-  footer a{overflow-wrap:anywhere}
-</style>
+<link rel="preload" href="fonts/barlow-condensed-800.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/barlow-condensed-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="site.css">
 </head>
 <body>
-<header class="top">
-  <a class="nav" href="jogos">Jogos</a>
-  <img src="logo-180.png" alt="Logótipo do Clube Sportivo de Pedrouços" width="76" height="76">
+<header class="bar">
+  <div class="bar-in">
+    <div class="brand"><img src="logo-180.png" alt="Clube Sportivo de Pedrouços" width="44" height="44"><span>Voleibol</span></div>
+    <nav class="nav" aria-label="Secções">
+      <a href="./" aria-current="page">Presenças</a>
+      <a href="jogos">Jogos</a>
+    </nav>
+  </div>
 </header>
-<main>
-  <p id="alert" hidden></p>
-  <div id="sessions"></div>
+
+<main class="wrap">
+  <p id="alert" class="notice" role="status" aria-live="polite" hidden></p>
+  <div id="sessions" aria-busy="true">
+    <div class="skeleton" aria-hidden="true"><i class="s1"></i><i class="s2"></i><i class="s3"><i></i><i></i><i></i></i></div>
+  </div>
   <datalist id="nomes"></datalist>
 </main>
-<footer>
-  <div>Pedidos de alteração: <a id="contactLink" href="mailto:einstein.rochaemelo+volley@mail.grokbot.com">einstein.rochaemelo+volley@<wbr>mail.grokbot.com</a></div>
-  <div style="margin-top:6px">Clube Sportivo de Pedrouços · Voleibol</div>
-</footer>
+
+<p id="toast" class="toast" role="alert" hidden></p>
+<p id="sr" class="sr-only" aria-live="polite"></p>
+
+<footer class="foot">Pedidos de alteração: <a id="contactLink" href="mailto:einstein.rochaemelo+volley@mail.grokbot.com">einstein.rochaemelo+volley@<wbr>mail.grokbot.com</a></footer>
+
+<template id="choicesTpl">
+  <div class="choices" role="group">
+    <button type="button" class="choice" data-status="vou" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+      <span>Vou</span>
+    </button>
+    <button type="button" class="choice" data-status="nao" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg>
+      <span>Não vou</span>
+    </button>
+    <button type="button" class="choice" data-status="talvez" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8.8 9.2a3.2 3.2 0 1 1 4.5 2.9c-.8.4-1.3 1.1-1.3 2v.6"/><path d="M12 18.6h.01"/></svg>
+      <span>Talvez</span>
+    </button>
+  </div>
+</template>
+
 <script type="module">
-import { STATUS_LABELS, cleanName, formatSession, lisbonToday, nextTrainings, normalizeName } from "./schedule.js";
+import { STATUS_LABELS, addDays, cleanName, formatSession, lisbonToday, nextTrainings, normalizeName } from "./schedule.js";
 
 const STORAGE_KEY = "csp-volley-nome";
-const state = { name: storedName(), dates: [], signature: "", sessions: new Map(), saving: new Set(), expected: new Map(), unconfigured: false };
-let errorKind = "";
+const ORDER = ["vou", "nao", "talvez"];
+const GROUP_LABELS = { vou: "Vão", nao: "Não vão", talvez: "Talvez" };
+const TALLY_LABELS = { vou: "vão", nao: "não vão", talvez: "talvez" };
+const EXPECT_MS = 120000;
+const UNAVAILABLE = "As presenças ainda não estão disponíveis.";
+const LOAD_FAIL = "Não foi possível carregar as presenças.";
+const SAVE_FAIL = "Não foi possível guardar.";
 
-function setContact(address) {
-  const link = document.getElementById("contactLink");
-  link.href = `mailto:${address}`;
-  const at = address.lastIndexOf("@");
-  link.replaceChildren();
-  if (at > 0) link.append(address.slice(0, at + 1), document.createElement("wbr"), address.slice(at + 1));
-  else link.textContent = address;
+const state = {
+  name: storedName(),
+  editing: false,
+  signature: "",
+  dates: [],
+  sessions: new Map(), // confirmado pelo servidor
+  pending: new Map(),  // resposta mostrada já, enquanto se guarda
+  queued: new Map(),   // resposta a enviar quando a anterior terminar
+  inflight: new Set(),
+  expected: new Map(), // evita que uma leitura atrasada desfaça a resposta acabada de dar
+  unconfigured: false,
+};
+let alertKind = "";
+let toastTimer = 0;
+
+const $ = (id) => document.getElementById(id);
+function el(tag, className, text) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
 }
+
+/* ---------- Nome guardado no telemóvel ---------- */
 
 function storedName() {
   try { return cleanName(localStorage.getItem(STORAGE_KEY) || "") || ""; }
   catch { return ""; }
 }
 
-function showError(message, kind) {
-  errorKind = kind;
-  const alert = document.getElementById("alert");
-  alert.hidden = false;
-  alert.textContent = message;
-}
-
-function clearError(kind) {
-  if (kind && errorKind !== kind) return;
-  errorKind = "";
-  const alert = document.getElementById("alert");
-  alert.hidden = true;
-  alert.textContent = "";
-}
-
 function remember(name) {
   state.name = name;
+  state.editing = false;
   try { localStorage.setItem(STORAGE_KEY, name); } catch { /* modo privado */ }
-  const input = document.getElementById("nome");
-  if (input) input.removeAttribute("aria-invalid");
-  paintName();
-  paintPressed();
+  hideToast();
+  paintWho();
+  paintAll();
 }
 
-function paintName() {
-  const slot = document.getElementById("nameSlot");
+function paintWho() {
+  const slot = $("who");
   if (!slot) return;
   slot.replaceChildren();
-  if (state.name) {
-    const line = document.createElement("p");
-    line.className = "me";
-    const who = document.createElement("span");
-    who.textContent = state.name;
-    const change = document.createElement("button");
+  if (state.name && !state.editing) {
+    const line = el("p", "who-line");
+    const change = el("button", "link-btn", "Alterar");
     change.type = "button";
-    change.className = "alterar";
-    change.textContent = "alterar";
+    change.setAttribute("aria-label", "Alterar nome");
     change.addEventListener("click", () => {
-      const previous = state.name;
-      state.name = "";
-      try { localStorage.removeItem(STORAGE_KEY); } catch { /* ignore */ }
-      paintName();
-      paintPressed();
-      const input = document.getElementById("nome");
-      if (input) {
-        input.value = previous;
-        input.focus();
-        input.select();
-      }
+      state.editing = true;
+      paintWho();
+      const input = $("nome");
+      input.focus();
+      input.select();
     });
-    line.append(who, change);
+    line.append(el("strong", "", state.name), change);
     slot.appendChild(line);
     return;
   }
-  const form = document.createElement("form");
-  const input = document.createElement("input");
-  input.id = "nome";
-  input.className = "nome";
-  input.placeholder = "Nome";
-  input.maxLength = 40;
-  input.autocomplete = "name";
-  input.enterKeyHint = "done";
+  const form = el("form", "who-form");
+  const label = el("label", "sr-only", "O teu nome");
+  label.htmlFor = "nome";
+  const input = el("input", "name-input");
+  Object.assign(input, { id: "nome", placeholder: "O teu nome", maxLength: 40, autocomplete: "name", enterKeyHint: "done", required: true });
+  input.setAttribute("autocapitalize", "words");
   input.setAttribute("list", "nomes");
-  input.required = true;
+  if (state.editing) input.value = state.name;
+  input.addEventListener("input", () => input.removeAttribute("aria-invalid"));
+  input.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && state.editing) {
+      state.editing = false;
+      paintWho();
+    }
+  });
+  input.addEventListener("blur", () => commitName(input, false));
   form.addEventListener("submit", (event) => {
     event.preventDefault();
-    const cleaned = cleanName(input.value);
-    if (!cleaned) {
-      input.setAttribute("aria-invalid", "true");
-      showError("Nome inválido.", "save");
-      input.focus();
-      return;
-    }
-    clearError("save");
-    remember(cleaned);
+    if (commitName(input, true)) input.blur();
   });
-  form.appendChild(input);
+  form.append(label, input);
   slot.appendChild(form);
 }
 
-function paintShell(dates) {
-  const root = document.getElementById("sessions");
-  root.replaceChildren();
-  if (!dates.length) {
-    const empty = document.createElement("p");
-    empty.className = "zero";
-    empty.textContent = "Sem treinos.";
-    root.appendChild(empty);
-    return;
+function commitName(input, strict) {
+  if (!input.isConnected) return Boolean(state.name);
+  const raw = input.value;
+  const cleaned = cleanName(raw);
+  if (cleaned) {
+    if (cleaned !== state.name || state.editing) remember(cleaned);
+    return true;
   }
-  dates.forEach((date, index) => {
-    const article = document.createElement("article");
-    article.className = "card";
-    article.dataset.date = date;
-    const title = document.createElement(index === 0 ? "h1" : "h2");
-    title.className = "when";
-    title.textContent = formatSession(date);
-    article.appendChild(title);
-    if (index === 0) {
-      const slot = document.createElement("div");
-      slot.id = "nameSlot";
-      article.appendChild(slot);
-    }
-    const actions = document.createElement("div");
-    actions.className = "actions";
-    for (const status of ["vou", "nao", "talvez"]) {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.dataset.status = status;
-      button.textContent = STATUS_LABELS[status];
-      button.setAttribute("aria-pressed", "false");
-      button.addEventListener("click", () => vote(date, status));
-      actions.appendChild(button);
-    }
-    const lists = document.createElement("div");
-    lists.className = "lists";
-    article.append(actions, lists);
-    root.appendChild(article);
-  });
-  paintName();
-  for (const date of dates) paintLists(date);
-  paintPressed();
+  if (!raw.trim() && state.editing) {
+    state.editing = false;
+    paintWho();
+    return true;
+  }
+  if (strict || raw.trim()) {
+    input.setAttribute("aria-invalid", "true");
+    showToast(raw.trim() ? "Nome inválido." : "Escreve o teu nome.");
+  }
+  return false;
 }
 
-function paintLists(date) {
-  const article = document.querySelector(`article[data-date="${date}"]`);
-  const lists = article?.querySelector(".lists");
-  if (!lists) return;
-  const session = state.sessions.get(date);
-  lists.replaceChildren();
-  if (!session) return;
-  const groups = ["vou", "nao", "talvez"].filter((status) => session.counts[status] > 0);
-  if (!groups.length) {
-    const zero = document.createElement("p");
-    zero.className = "zero";
-    zero.textContent = "Vou 0 · Não vou 0";
-    lists.appendChild(zero);
-    return;
-  }
-  for (const status of groups) {
-    const group = document.createElement("div");
-    group.className = `group ${status}`;
-    const heading = document.createElement("h2");
-    heading.textContent = `${STATUS_LABELS[status]} ${session.counts[status]}`;
-    const ul = document.createElement("ul");
-    for (const person of session.people.filter((item) => item.status === status)) {
-      const li = document.createElement("li");
-      li.textContent = person.name;
-      ul.appendChild(li);
-    }
-    group.append(heading, ul);
-    lists.appendChild(group);
-  }
+/* ---------- Mensagens ---------- */
+
+function setAlert(message, kind) {
+  alertKind = kind;
+  const box = $("alert");
+  box.className = kind === "storage" ? "notice" : "notice notice--error";
+  box.textContent = message;
+  box.hidden = false;
 }
 
-function paintPressed() {
-  const mine = state.name ? normalizeName(state.name) : "";
-  for (const article of document.querySelectorAll("article[data-date]")) {
-    const session = state.sessions.get(article.dataset.date);
-    const mineStatus = mine && session ? session.people.find((person) => normalizeName(person.name) === mine)?.status : "";
-    for (const button of article.querySelectorAll("button[data-status]")) {
-      button.setAttribute("aria-pressed", mineStatus === button.dataset.status ? "true" : "false");
-      button.disabled = state.unconfigured || state.saving.has(article.dataset.date);
-    }
-  }
+function clearAlert(kind) {
+  if (kind && alertKind !== kind) return;
+  alertKind = "";
+  const box = $("alert");
+  box.hidden = true;
+  box.textContent = "";
 }
 
-function syncNames() {
-  const names = new Set();
-  for (const session of state.sessions.values()) {
-    for (const person of session.people || []) names.add(person.name);
-  }
-  const list = document.getElementById("nomes");
-  list.replaceChildren();
-  for (const name of [...names].sort((a, b) => a.localeCompare(b, "pt"))) {
-    const option = document.createElement("option");
-    option.value = name;
-    list.appendChild(option);
-  }
+function showToast(message) {
+  const toast = $("toast");
+  toast.textContent = message;
+  toast.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(hideToast, 4500);
+}
+
+function hideToast() {
+  clearTimeout(toastTimer);
+  $("toast").hidden = true;
+}
+
+function announce(message) {
+  const sr = $("sr");
+  sr.textContent = "";
+  requestAnimationFrame(() => { sr.textContent = message; });
 }
 
 function messageFrom(data, fallback) {
@@ -268,52 +211,186 @@ function messageFrom(data, fallback) {
   return fallback;
 }
 
-async function loadDate(date) {
-  const response = await fetch(`/api/presencas?date=${encodeURIComponent(date)}`, { cache: "no-store" });
-  const data = await response.json().catch(() => ({}));
-  if (response.status === 503 && data.code === "storage_unconfigured") {
-    state.unconfigured = true;
-    showError(messageFrom(data, "As presenças ainda não estão disponíveis."), "storage");
-    paintPressed();
+function setContact(address) {
+  const link = $("contactLink");
+  link.href = `mailto:${address}`;
+  const at = address.lastIndexOf("@");
+  link.replaceChildren();
+  if (at > 0) link.append(address.slice(0, at + 1), document.createElement("wbr"), address.slice(at + 1));
+  else link.textContent = address;
+}
+
+/* ---------- Estado mostrado ---------- */
+
+function withVote(base, name, status) {
+  const key = normalizeName(name);
+  const people = (base?.people || []).filter((person) => normalizeName(person.name) !== key);
+  people.push({ name, status });
+  people.sort((a, b) => a.name.localeCompare(b.name, "pt"));
+  const counts = { vou: 0, nao: 0, talvez: 0 };
+  for (const person of people) if (counts[person.status] !== undefined) counts[person.status] += 1;
+  return { date: base?.date, counts, people };
+}
+
+function view(date) {
+  const base = state.sessions.get(date);
+  const pending = state.pending.get(date);
+  return pending && state.name ? withVote(base, state.name, pending) : base;
+}
+
+function myStatus(date) {
+  if (!state.name) return "";
+  const pending = state.pending.get(date);
+  if (pending) return pending;
+  const key = normalizeName(state.name);
+  return state.sessions.get(date)?.people?.find((person) => normalizeName(person.name) === key)?.status || "";
+}
+
+/* ---------- Desenho ---------- */
+
+function eyebrowFor(date, today, index) {
+  if (date === today) return "Hoje";
+  if (date === addDays(today, 1)) return "Amanhã";
+  return index === 0 ? "Próximo treino" : "Treino seguinte";
+}
+
+function paintShell(dates, today) {
+  const root = $("sessions");
+  root.replaceChildren();
+  root.removeAttribute("aria-busy");
+  if (!dates.length) {
+    root.appendChild(el("p", "empty", "Sem treinos marcados."));
     return;
   }
-  if (!response.ok) throw new Error("load");
-  const expected = state.expected.get(date);
-  if (expected) {
-    const mine = (data.people || []).find((person) => normalizeName(person.name) === expected.name);
-    if (!mine || mine.status !== expected.status) return;
-    state.expected.delete(date);
-  }
-  state.unconfigured = false;
-  if (errorKind === "storage" || errorKind === "load") clearError(errorKind);
-  state.sessions.set(date, data);
-  paintLists(date);
-  paintPressed();
-  syncNames();
-}
-
-async function refresh() {
-  const results = await Promise.allSettled(state.dates.map((date) => loadDate(date)));
-  if (state.dates.length && results.every((result) => result.status === "rejected")) {
-    showError("Não foi possível carregar as presenças.", "load");
-  }
-}
-
-async function vote(date, status) {
-  const raw = state.name || document.getElementById("nome")?.value || "";
-  const name = cleanName(raw);
-  if (!name) {
-    const input = document.getElementById("nome");
-    if (raw.trim()) {
-      input?.setAttribute("aria-invalid", "true");
-      showError("Nome inválido.", "save");
+  const template = $("choicesTpl");
+  dates.forEach((date, index) => {
+    const section = el("section", `session ${index === 0 ? "session--next" : "session--later"}`);
+    section.dataset.date = date;
+    const heading = el(index === 0 ? "h1" : "h2", "date");
+    heading.id = `t-${date}`;
+    const [dow, dm] = formatSession(date).split(" ");
+    heading.append(el("span", "dow", dow), dm);
+    section.setAttribute("aria-labelledby", heading.id);
+    section.append(el("p", "eyebrow", eyebrowFor(date, today, index)), heading);
+    if (index === 0) {
+      const who = el("div", "who");
+      who.id = "who";
+      section.appendChild(who);
     }
-    input?.focus();
+    const choices = template.content.firstElementChild.cloneNode(true);
+    choices.setAttribute("aria-label", `Resposta para ${formatSession(date)}`);
+    for (const button of choices.querySelectorAll(".choice")) {
+      button.addEventListener("click", () => vote(date, button.dataset.status));
+    }
+    section.append(choices, el("div", "tally"), el("div", "roster"));
+    root.appendChild(section);
+  });
+  paintWho();
+  paintAll();
+}
+
+function paintAll() {
+  for (const date of state.dates) paintSession(date);
+}
+
+function paintSession(date) {
+  const section = document.querySelector(`section[data-date="${date}"]`);
+  if (!section) return;
+  const data = view(date);
+  const mine = state.name ? normalizeName(state.name) : "";
+  const status = myStatus(date);
+  $("sessions").classList.toggle("unavailable", state.unconfigured);
+
+  const choices = section.querySelector(".choices");
+  choices.classList.toggle("chosen", Boolean(status));
+  for (const button of choices.querySelectorAll(".choice")) {
+    const on = button.dataset.status === status;
+    button.setAttribute("aria-pressed", on ? "true" : "false");
+    button.disabled = state.unconfigured;
+    if (on && state.inflight.has(date)) button.setAttribute("aria-busy", "true");
+    else button.removeAttribute("aria-busy");
+  }
+
+  const tally = section.querySelector(".tally");
+  tally.replaceChildren();
+  for (const key of ORDER) {
+    const cell = el("div", key);
+    cell.append(el("b", "", data ? String(data.counts?.[key] ?? 0) : "–"), el("span", "", TALLY_LABELS[key]));
+    tally.appendChild(cell);
+  }
+
+  const roster = section.querySelector(".roster");
+  roster.replaceChildren();
+  if (!data) return;
+  for (const key of ORDER) {
+    const people = (data.people || []).filter((person) => person.status === key);
+    if (!people.length) continue;
+    const group = el("div", `group group--${key}`);
+    const list = el("ul", "names");
+    for (const person of people) {
+      const item = el("li", mine && normalizeName(person.name) === mine ? "me" : "", person.name);
+      list.appendChild(item);
+    }
+    group.append(el("h3", "", GROUP_LABELS[key]), list);
+    roster.appendChild(group);
+  }
+}
+
+function syncNames() {
+  const names = new Set();
+  for (const session of state.sessions.values()) {
+    for (const person of session.people || []) names.add(person.name);
+  }
+  const list = $("nomes");
+  list.replaceChildren();
+  for (const name of [...names].sort((a, b) => a.localeCompare(b, "pt"))) {
+    const option = document.createElement("option");
+    option.value = name;
+    list.appendChild(option);
+  }
+}
+
+/* ---------- Respostas ---------- */
+
+function vote(date, status) {
+  if (state.unconfigured) return;
+  const input = $("nome");
+  if (input) {
+    const raw = input.value;
+    const cleaned = cleanName(raw);
+    if (cleaned) {
+      if (cleaned !== state.name || state.editing) remember(cleaned);
+    } else if (raw.trim() || !state.name) {
+      input.setAttribute("aria-invalid", "true");
+      showToast(raw.trim() ? "Nome inválido." : "Escreve o teu nome.");
+      input.focus();
+      return;
+    } else {
+      state.editing = false;
+      paintWho();
+    }
+  }
+  const name = state.name;
+  if (!name) return;
+  hideToast();
+  if (myStatus(date) === status && !state.inflight.has(date)) {
+    announce(`${STATUS_LABELS[status]} · ${formatSession(date)}`);
     return;
   }
-  remember(name);
-  state.saving.add(date);
-  paintPressed();
+  state.pending.set(date, status);
+  try { navigator.vibrate?.(12); } catch { /* sem vibração */ }
+  if (state.inflight.has(date)) {
+    state.queued.set(date, { name, status });
+    paintSession(date);
+    return;
+  }
+  send(date, name, status);
+}
+
+async function send(date, name, status) {
+  state.inflight.add(date);
+  paintSession(date);
+  let saved = false;
   try {
     const response = await fetch("/api/presencas", {
       method: "POST",
@@ -324,25 +401,62 @@ async function vote(date, status) {
     const data = await response.json().catch(() => ({}));
     if (response.status === 503 && data.code === "storage_unconfigured") {
       state.unconfigured = true;
-      showError(messageFrom(data, "As presenças ainda não estão disponíveis."), "storage");
-      return;
+      setAlert(messageFrom(data, UNAVAILABLE), "storage");
+    } else if (!response.ok) {
+      showToast(messageFrom(data, SAVE_FAIL));
+    } else {
+      saved = true;
+      state.unconfigured = false;
+      state.sessions.set(date, data);
+      state.expected.set(date, { name: normalizeName(name), status, until: Date.now() + EXPECT_MS });
+      syncNames();
     }
-    if (!response.ok) {
-      showError(messageFrom(data, "Não foi possível guardar."), "save");
-      return;
-    }
-    clearError("save");
-    state.unconfigured = false;
-    state.expected.set(date, { name: normalizeName(name), status });
-    state.sessions.set(date, data);
-    paintLists(date);
-    syncNames();
   } catch {
-    showError("Não foi possível guardar.", "save");
+    showToast(SAVE_FAIL);
   } finally {
-    state.saving.delete(date);
-    paintPressed();
+    state.inflight.delete(date);
+    const next = state.queued.get(date);
+    state.queued.delete(date);
+    if (next && !state.unconfigured) {
+      send(date, next.name, next.status);
+    } else {
+      state.pending.delete(date);
+      paintSession(date);
+      if (saved) announce(`${STATUS_LABELS[status]} · ${formatSession(date)} · guardado`);
+    }
   }
+}
+
+/* ---------- Leitura ---------- */
+
+async function loadDate(date) {
+  const response = await fetch(`/api/presencas?date=${encodeURIComponent(date)}`, { cache: "no-store" });
+  const data = await response.json().catch(() => ({}));
+  if (response.status === 503 && data.code === "storage_unconfigured") {
+    state.unconfigured = true;
+    setAlert(messageFrom(data, UNAVAILABLE), "storage");
+    paintSession(date);
+    return;
+  }
+  if (!response.ok) throw new Error("load");
+  const expected = state.expected.get(date);
+  if (expected) {
+    const mine = (data.people || []).find((person) => normalizeName(person.name) === expected.name);
+    const caughtUp = mine && mine.status === expected.status;
+    if (!caughtUp && Date.now() < expected.until) return;
+    state.expected.delete(date);
+  }
+  state.unconfigured = false;
+  if (alertKind === "storage" || alertKind === "load") clearAlert(alertKind);
+  state.sessions.set(date, data);
+  paintSession(date);
+  syncNames();
+}
+
+async function refresh() {
+  const dates = state.dates.filter((date) => !state.inflight.has(date));
+  const results = await Promise.allSettled(dates.map((date) => loadDate(date)));
+  if (dates.length && results.every((result) => result.status === "rejected")) setAlert(LOAD_FAIL, "load");
 }
 
 async function boot() {
@@ -350,26 +464,35 @@ async function boot() {
   if (!response.ok) throw new Error("data");
   const data = await response.json();
   const contact = data?.equipa?.contacto_alteracoes;
-  if (contact) setContact(contact);
-  const dates = nextTrainings(data, lisbonToday(), 2);
-  const signature = dates.join();
+  if (typeof contact === "string" && contact.includes("@")) setContact(contact);
+  const today = lisbonToday();
+  const dates = nextTrainings(data, today, 2);
+  const signature = `${today}|${dates.join()}`;
   if (signature !== state.signature) {
+    const editingValue = $("nome")?.value;
     state.signature = signature;
     state.dates = dates;
-    state.sessions.clear();
-    paintShell(dates);
+    for (const key of [...state.sessions.keys()]) if (!dates.includes(key)) state.sessions.delete(key);
+    paintShell(dates, today);
+    if (editingValue && $("nome")) $("nome").value = editingValue;
     if (dates[0]) document.title = `${formatSession(dates[0])} · Voleibol CSP`;
   }
   if (dates.length) await refresh();
 }
 
-boot().catch(() => showError("Não foi possível carregar as presenças.", "load"));
+function run() {
+  boot().catch(() => {
+    if (!state.signature) $("sessions").replaceChildren();
+    setAlert(LOAD_FAIL, "load");
+  });
+}
+
+run();
 setInterval(() => {
-  if (document.hidden || state.saving.size) return;
-  boot().catch(() => showError("Não foi possível carregar as presenças.", "load"));
+  if (!document.hidden && !state.inflight.size) run();
 }, 5000);
 document.addEventListener("visibilitychange", () => {
-  if (!document.hidden && !state.saving.size) boot().catch(() => showError("Não foi possível carregar as presenças.", "load"));
+  if (!document.hidden && !state.inflight.size) run();
 });
 </script>
 </body>
