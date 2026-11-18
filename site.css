@@ -1,20 +1,5 @@
 /* Voleibol CSP — estilos partilhados por index.html e jogos.html. Sem build. */
 
-@font-face {
-  font-family: "Barlow Condensed";
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("fonts/barlow-condensed-700.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Barlow Condensed";
-  font-style: normal;
-  font-weight: 800;
-  font-display: swap;
-  src: url("fonts/barlow-condensed-800.woff2") format("woff2");
-}
-
 :root {
   --black: #111111;
   --surface: #1a1a1a;
@@ -25,15 +10,15 @@
   --white: #ffffff;
   --muted: #a9a9a9;
   --red: #E63946;
-  --display: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
-  --text: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --display: "Rajdhani", "Arial Narrow", system-ui, sans-serif;
+  --text: "Rajdhani", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   --gutter: 16px;
   --radius: 14px;
   color-scheme: dark;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; font-size: 87.5%; }
 body {
   margin: 0;
   min-height: 100vh;
@@ -42,7 +27,7 @@ body {
   flex-direction: column;
   background: var(--black);
   color: var(--white);
-  font: 16px/1.45 var(--text);
+  font: 1rem/1.45 var(--text);
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
 }
@@ -199,7 +184,7 @@ button { font: inherit; color: inherit; }
   border: 2px solid #4a4a4a;
   background: var(--surface);
   color: var(--white);
-  font: 600 17px/1.2 var(--text);
+  font: 600 max(16px, 1rem)/1.2 var(--text);
 }
 .name-input::placeholder { color: #8d8d8d; }
 .name-input::-webkit-calendar-picker-indicator { display: none !important; opacity: 0; }

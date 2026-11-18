@@ -10,8 +10,7 @@ O deploy de produção faz-se pelo git (`main`). A função `api/presencas.js` p
 
 - `index.html` — presenças do próximo treino e do seguinte. Terças e quintas, sem hora nem local.
 - `jogos.html` — próximos jogos e resultados.
-- `site.css` — estilos partilhados (preto, amarelo dourado, branco; vermelho só para "Não vou" e erros).
-- `fonts/` — Barlow Condensed 700 e 800 (subconjunto latino, licença OFL em `fonts/OFL.txt`).
+- `site.css` — estilos partilhados (preto, amarelo dourado, branco; vermelho só para "Não vou" e erros). Tipografia Rajdhani (Google Fonts, `display=swap`), com fallback de sistema.
 - `data.json` — jogos e horário. Em `treinos`: `dias` (`terca`, `quinta`) e `cancelados` (datas `AAAA-MM-DD`).
 - `schedule.js` — geração das datas e validação dos nomes, usado pela página e pela API.
 
