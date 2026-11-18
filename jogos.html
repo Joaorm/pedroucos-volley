@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#111111">
+<title>Jogos · Voleibol CSP</title>
+<meta name="description" content="Resultados e próximos jogos da equipa de voleibol do Clube Sportivo de Pedrouços.">
+<link rel="icon" href="logo-180.png">
+<link rel="apple-touch-icon" href="logo-180.png">
+<style>
+  :root{--bg:#111111;--card:#1b1b1b;--line:#2c2c2c;--gold:#FFD700;--white:#ffffff;--muted:#b8b8b8;--red:#E63946}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:16px;color-scheme:dark}
+  body{margin:0;background:var(--bg);color:var(--white);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:var(--gold)}
+  header.hero{position:relative;text-align:center;padding:28px 16px 18px;border-bottom:3px solid var(--gold);background:radial-gradient(circle at 50% 0,#262200 0,var(--bg) 70%)}
+  header.hero img{width:104px;height:104px;display:block;margin:0 auto 12px;border-radius:50%;box-shadow:0 0 0 3px var(--gold),0 6px 24px rgba(255,215,0,.18)}
+  header.hero h1{margin:0;font-size:1.6rem;color:var(--gold);letter-spacing:.02em}
+  header.hero p{margin:4px 0 0;color:var(--muted);font-size:.95rem}
+  a.nav{position:absolute;top:8px;right:6px;min-height:44px;display:inline-flex;align-items:center;padding:8px 10px;font-weight:700;text-decoration:none}
+  main{max-width:760px;margin:0 auto;padding:8px 14px 24px}
+  section{margin-top:26px}
+  h2{color:var(--gold);font-size:1.2rem;margin:0 0 12px;display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.06em}
+  h2::before{content:"";width:6px;height:20px;background:var(--gold);border-radius:2px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px}
+  .card h3{margin:0 0 4px;font-size:1.05rem}
+  .meta{color:var(--muted);font-size:.9rem}
+  .comp{color:var(--muted);font-size:.78rem;margin-top:4px}
+  .row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+  .badge{display:inline-block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border-radius:6px;padding:2px 7px;margin-right:6px;vertical-align:middle}
+  .b-casa{border:1px solid var(--gold);color:var(--gold)}
+  .b-fora{border:1px solid #777;color:#ddd}
+  .b-ex{background:transparent;border:1px dashed #888;color:#aaa}
+  .when{text-align:right;flex:0 0 auto}
+  .when .d{font-weight:700;color:var(--gold);text-transform:capitalize}
+  .when .t{font-size:1.25rem;font-weight:800}
+  .score{font-size:1.5rem;font-weight:800;white-space:nowrap}
+  .win{color:var(--gold)} .loss{color:var(--muted)}
+  .sets{margin-top:6px;display:flex;flex-wrap:wrap;gap:6px}
+  .sets span{font-size:.82rem;background:#262626;border-radius:6px;padding:2px 8px;font-variant-numeric:tabular-nums}
+  .video{display:inline-block;margin-top:8px;font-weight:700}
+  .empty{color:var(--muted);font-style:italic}
+  .err{background:var(--red);color:#fff;padding:12px;border-radius:10px}
+  footer{border-top:3px solid var(--gold);text-align:center;padding:18px 14px calc(28px + env(safe-area-inset-bottom));color:var(--muted);font-size:.88rem}
+  footer a{overflow-wrap:anywhere}
+</style>
+</head>
+<body>
+<header class="hero">
+  <a class="nav" href="./">Presenças</a>
+  <img src="logo-180.png" alt="Logótipo do Clube Sportivo de Pedrouços" width="104" height="104">
+  <h1 id="teamName">Voleibol CSP</h1>
+  <p id="teamSub">Clube Sportivo de Pedrouços</p>
+</header>
+<main>
+  <div id="loadError"></div>
+  <section id="resultados"><h2>Resultados</h2><div id="resultadosList"></div></section>
+  <section id="jogos"><h2>Próximos jogos</h2><div id="jogosList"></div></section>
+</main>
+<footer>
+  <div>Pedidos de alteração: <a id="contactLink" href="mailto:einstein.rochaemelo+volley@mail.grokbot.com">einstein.rochaemelo+volley@<wbr>mail.grokbot.com</a></div>
+  <div style="margin-top:6px">Clube Sportivo de Pedrouços · Voleibol</div>
+</footer>
+<script>
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const civil = iso => { const [y,m,d] = iso.split("-").map(Number); return new Date(Date.UTC(y, m - 1, d, 12)); };
+const fmtDia = d => civil(d).toLocaleDateString("pt-PT", {timeZone:"UTC", weekday:"short", day:"numeric", month:"short"});
+const fmtData = d => civil(d).toLocaleDateString("pt-PT", {timeZone:"UTC", day:"numeric", month:"long", year:"numeric"});
+const lisbonToday = () => new Intl.DateTimeFormat("en-CA", {timeZone:"Europe/Lisbon", year:"numeric", month:"2-digit", day:"2-digit"}).format(new Date());
+const ex = o => o.exemplo ? '<span class="badge b-ex">Exemplo</span>' : "";
+const casaFora = o => o.casa === undefined ? "" : (o.casa ? '<span class="badge b-casa">Casa</span>' : '<span class="badge b-fora">Fora</span>');
+const empty = t => `<p class="empty">${t}</p>`;
+const safeUrl = value => {
+  if (typeof value !== "string" || !value) return "";
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" || url.protocol === "http:" ? url.href : "";
+  } catch { return ""; }
+};
+const videoLink = value => {
+  const url = safeUrl(value);
+  return url ? `<a class="video" href="${esc(url)}" target="_blank" rel="noopener noreferrer">Vídeo</a>` : "";
+};
+const compLine = value => value ? `<div class="comp">${esc(value)}</div>` : "";
+
+function render(data){
+  const eq = data.equipa || {};
+  if (eq.nome) { document.getElementById("teamName").textContent = eq.nome; document.title = "Jogos · " + eq.nome; }
+  if (eq.clube || eq.subtitulo) document.getElementById("teamSub").textContent = [eq.clube, eq.subtitulo].filter(Boolean).join(" · ");
+  if (eq.contacto_alteracoes) {
+    const a = document.getElementById("contactLink");
+    const address = eq.contacto_alteracoes;
+    a.href = "mailto:" + address;
+    const at = address.lastIndexOf("@");
+    a.replaceChildren();
+    if (at > 0) a.append(address.slice(0, at + 1), document.createElement("wbr"), address.slice(at + 1));
+    else a.textContent = address;
+  }
+
+  const today = lisbonToday();
+  const jogos = (data.proximos_jogos || []).filter(e => e.data >= today)
+    .sort((a,b) => (a.data + (a.hora||"")).localeCompare(b.data + (b.hora||"")));
+  document.getElementById("jogosList").innerHTML = jogos.length ? jogos.map(e => `
+    <article class="card"><div class="row">
+      <div>
+        <div>${casaFora(e)}${ex(e)}</div>
+        <h3>vs ${esc(e.adversario || "Adversário a definir")}</h3>
+        <div class="meta">📍 ${esc(e.local || "Local a definir")}</div>
+        ${compLine(e.competicao)}
+        ${videoLink(e.video)}
+      </div>
+      <div class="when"><div class="d">${e.data ? fmtDia(e.data) : ""}</div><div class="t">${esc(e.hora || "--:--")}</div></div>
+    </div></article>`).join("") : empty("Sem jogos marcados.");
+
+  const res = [...(data.resultados || [])].sort((a,b) => String(b.data).localeCompare(String(a.data)));
+  document.getElementById("resultadosList").innerHTML = res.length ? res.map(r => {
+    const sets = (r.sets || []).map(s => String(s).split("-").map(Number)).filter(([a,b]) => Number.isFinite(a) && Number.isFinite(b));
+    if (!sets.length) {
+      const label = r.resultado ? esc(r.resultado) : "Resultado por confirmar";
+      return `<article class="card"><div class="row">
+        <div>
+          <div>${casaFora(r)}${ex(r)}</div>
+          <h3>vs ${esc(r.adversario)}</h3>
+          <div class="meta">${r.data ? fmtData(r.data) : ""}</div>
+          <div class="meta">${label}</div>
+          ${compLine(r.competicao)}
+          ${videoLink(r.video)}
+        </div>
+      </div></article>`;
+    }
+    const nos = sets.filter(([a,b]) => a > b).length, eles = sets.filter(([a,b]) => b > a).length;
+    const ganhou = nos > eles;
+    return `<article class="card"><div class="row">
+      <div>
+        <div>${casaFora(r)}${ex(r)}</div>
+        <h3>vs ${esc(r.adversario)}</h3>
+        <div class="meta">${r.data ? fmtData(r.data) : ""}</div>
+        ${compLine(r.competicao)}
+        ${videoLink(r.video)}
+      </div>
+      <div class="when"><div class="score ${ganhou ? "win" : "loss"}">${nos} – ${eles}</div><div class="meta">${ganhou ? "Vitória" : "Derrota"}</div></div>
+    </div>
+    <div class="sets">${sets.map(([a,b],i) => `<span>S${i+1}: ${a}-${b}</span>`).join("")}</div>
+    </article>`;
+  }).join("") : empty("Ainda sem resultados.");
+}
+
+fetch("data.json", {cache: "no-store"})
+  .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+  .then(render)
+  .catch(() => { document.getElementById("loadError").innerHTML = '<p class="err">Não foi possível carregar os dados da equipa. Tenta recarregar a página.</p>'; });
+</script>
+</body>
+</html>
