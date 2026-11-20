@@ -23,6 +23,24 @@
       "casa": false,
       "competicao": "Liga de Voleibol Masculino do Distrito de Lisboa 2026/27 · 1ª fase · Série C · Jogo 56",
       "video": null
+    },
+    {
+      "data": "2026-12-10",
+      "hora": "22:00",
+      "local": "Pav. 1º Maio (central)",
+      "adversario": "C. D. R. Ramalha",
+      "casa": true,
+      "competicao": "Liga de Voleibol Masculino do Distrito de Lisboa 2026/27 · 1ª fase · Série C · Jogo 59",
+      "video": null
+    },
+    {
+      "data": "2026-12-15",
+      "hora": "20:00",
+      "local": "Pav. 1º Maio (sul)",
+      "adversario": "ADCEO - ATP",
+      "casa": true,
+      "competicao": "Liga de Voleibol Masculino do Distrito de Lisboa 2026/27 · 1ª fase · Série C · Jogo 64",
+      "video": null
     }
   ],
   "resultados": [
