@@ -158,6 +158,23 @@ test("a página de presenças não mostra hora nem local e os jogos mantêm o ca
   assert.match(jogos, /href="\.\/"/);
   assert.match(jogos, /einstein\.rochaemelo\+volley@(?:<wbr>)?mail\.grokbot\.com/);
   assert.deepEqual(data.treinos, { dias: ["terca", "quinta"], cancelados: [] });
-  assert.equal(data.proximos_jogos[0].adversario, "Bairro São João A. C.");
-  assert.equal(data.resultados.length, 2);
+  assert.deepEqual(data.proximos_jogos.map((game) => game.adversario), [
+    "C. D. R. Ramalha",
+    "ADCEO - ATP",
+  ]);
+  assert.deepEqual(
+    data.resultados.map((game) => ({
+      data: game.data,
+      adversario: game.adversario,
+      casa: game.casa,
+      resultado: game.resultado,
+      sets: game.sets,
+    })),
+    [
+      { data: "2026-11-23", adversario: "C. D. Cova da Piedade", casa: false, resultado: null, sets: [] },
+      { data: "2026-11-20", adversario: "Bairro São João A. C.", casa: true, resultado: "0-3", sets: [] },
+      { data: "2026-11-09", adversario: "Odivelas Sports Club", casa: false, resultado: "0-3", sets: [] },
+      { data: "2026-11-06", adversario: "R. C. Vale de Cavala", casa: true, resultado: "1-3", sets: [] },
+    ],
+  );
 });

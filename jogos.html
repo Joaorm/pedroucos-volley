@@ -116,15 +116,21 @@ function resultCard(game, shared) {
   const sets = (Array.isArray(game.sets) ? game.sets : [])
     .map((set) => String(set).split("-").map(Number))
     .filter(([a, b]) => Number.isFinite(a) && Number.isFinite(b));
+  const parts = typeof game.resultado === "string" ? game.resultado.split("-") : [];
+  const fromResultado = !sets.length
+    && parts.length === 2
+    && parts.every((part) => part.trim() !== "" && Number.isFinite(Number(part)));
   let score = "";
   let detail;
-  if (sets.length) {
-    const nos = sets.filter(([a, b]) => a > b).length;
-    const eles = sets.filter(([a, b]) => b > a).length;
+  if (sets.length || fromResultado) {
+    const nos = sets.length ? sets.filter(([a, b]) => a > b).length : Number(parts[0]);
+    const eles = sets.length ? sets.filter(([a, b]) => b > a).length : Number(parts[1]);
     const outcome = nos > eles ? "win" : eles > nos ? "loss" : "";
     const label = outcome === "win" ? "Vitória" : outcome === "loss" ? "Derrota" : "";
     score = `<div class="score ${outcome}"><b>${nos}–${eles}</b>${label ? `<span>${label}</span>` : ""}</div>`;
-    detail = `<div class="sets"><span class="sr-only">Parciais:</span>${sets.map(([a, b]) => `<span${a > b ? ' class="won"' : ""}>${a}–${b}</span>`).join("")}</div>`;
+    detail = sets.length
+      ? `<div class="sets"><span class="sr-only">Parciais:</span>${sets.map(([a, b]) => `<span${a > b ? ' class="won"' : ""}>${a}–${b}</span>`).join("")}</div>`
+      : "";
   } else {
     detail = `<p class="pending">${game.resultado ? esc(game.resultado) : "Resultado por confirmar"}</p>`;
   }
